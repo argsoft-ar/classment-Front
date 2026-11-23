@@ -1,0 +1,46 @@
+.callout {
+  --callout-accent: var(--color-info);
+  display: flex;
+  gap: var(--space-3);
+  padding: var(--space-3) var(--space-4);
+  border: 1px solid color-mix(in srgb, var(--callout-accent) 35%, transparent);
+  border-left: 4px solid var(--callout-accent);
+  border-radius: var(--radius-lg);
+  background-color: color-mix(in srgb, var(--callout-accent) 8%, var(--color-surface));
+}
+
+.callout--info { --callout-accent: var(--color-info); }
+.callout--success { --callout-accent: var(--color-success); }
+.callout--warning { --callout-accent: var(--color-warning); }
+.callout--danger { --callout-accent: var(--color-danger); }
+
+.icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 1.5rem;
+  height: 1.5rem;
+  /* El ícono Lucide hereda el color de acento vía currentColor */
+  color: var(--callout-accent);
+}
+
+.content {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  min-width: 0;
+}
+
+.title {
+  margin: 0;
+  font-size: var(--font-size-sm);
+  font-weight: 700;
+  color: var(--color-text-primary);
+}
+
+.message {
+  margin: 0;
+  font-size: var(--font-size-sm);
+  color: var(--color-text-primary);
+}

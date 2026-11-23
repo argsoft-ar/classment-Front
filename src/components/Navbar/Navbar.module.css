@@ -1,50 +1,200 @@
-.navbar {
+/*
+ * Fixed vertical sidebar.
+ * Mobile-first: < 768px → fixed top bar + off-canvas drawer with backdrop.
+ *              >= 768px → sidebar always visible, top bar/backdrop hidden.
+ */
+
+/* Applied to <body> while the mobile drawer is open. */
+.bodyLocked {
+  overflow: hidden;
+}
+
+/* ---------- Mobile top bar ---------- */
+.topbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: var(--z-topbar);
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  padding: var(--space-4) var(--space-8);
+  gap: var(--space-3);
+  height: var(--topbar-height);
+  padding: 0 var(--space-3);
   background-color: var(--color-surface);
   border-bottom: 1px solid var(--color-border);
   box-shadow: var(--shadow-sm);
-  position: sticky;
-  top: 0;
-  z-index: 100;
+}
+
+.topbarBrand {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  min-width: 0;
+}
+
+.menuToggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 2.75rem;
+  height: 2.75rem;
+  padding: 0;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background-color: var(--color-surface);
+  color: var(--color-text-primary);
+  cursor: pointer;
+  transition: background-color var(--transition-fast);
+}
+
+.menuToggle:hover {
+  background-color: var(--color-bg);
+}
+
+/* ---------- Backdrop ---------- */
+.backdrop {
+  position: fixed;
+  inset: var(--topbar-height) 0 0 0;
+  z-index: var(--z-sidebar-backdrop);
+  background-color: var(--color-overlay);
+  opacity: 0;
+  visibility: hidden;
+  transition:
+    opacity var(--transition-base),
+    visibility var(--transition-base);
+}
+
+.backdropVisible {
+  opacity: 1;
+  visibility: visible;
+}
+
+/* ---------- Sidebar ---------- */
+.sidebar {
+  position: fixed;
+  top: var(--topbar-height);
+  left: 0;
+  z-index: var(--z-sidebar);
+  display: flex;
+  flex-direction: column;
+  width: var(--sidebar-width);
+  max-width: 85vw;
+  height: calc(100vh - var(--topbar-height));
+  height: calc(100dvh - var(--topbar-height));
+  background-color: var(--color-surface);
+  border-right: 1px solid var(--color-border);
+  box-shadow: var(--shadow-lg);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  /* Closed: off-canvas and removed from tab order / a11y tree. */
+  transform: translateX(-100%);
+  visibility: hidden;
+  transition:
+    transform var(--transition-slow),
+    visibility var(--transition-slow);
+}
+
+.sidebarOpen {
+  transform: translateX(0);
+  visibility: visible;
 }
 
 .brand {
-  display: flex;
+  display: none;
   align-items: center;
   gap: var(--space-2);
+  padding: var(--space-6) var(--space-4) var(--space-4);
 }
 
 .logo {
-  font-size: var(--font-size-xl);
+  flex-shrink: 0;
   color: var(--color-primary);
 }
 
 .title {
   font-size: var(--font-size-lg);
-  font-weight: var(--font-weight-bold, 700);
+  font-weight: 700;
   color: var(--color-text-primary);
   letter-spacing: -0.01em;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.nav {
+  flex: 1;
+  padding: var(--space-4) var(--space-3);
+}
+
+.links {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.link {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  min-height: 2.75rem;
+  padding: var(--space-2) var(--space-3);
+  border-radius: var(--radius-md);
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-sm);
+  font-weight: 600;
+  text-decoration: none;
+  transition:
+    background-color var(--transition-fast),
+    color var(--transition-fast);
+}
+
+.linkIcon {
+  flex-shrink: 0;
+}
+
+.linkLabel {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.link:hover {
+  color: var(--color-primary);
+  background-color: color-mix(in srgb, var(--color-primary) 6%, transparent);
+}
+
+.linkActive {
+  color: var(--color-primary);
+  background-color: color-mix(in srgb, var(--color-primary) 12%, transparent);
+  box-shadow: inset 3px 0 0 var(--color-primary);
 }
 
 .userSection {
   display: flex;
-  align-items: center;
-  gap: var(--space-4);
+  flex-direction: column;
+  gap: var(--space-3);
+  padding: var(--space-4);
+  border-top: 1px solid var(--color-border);
 }
 
 .userInfo {
   display: flex;
   flex-direction: column;
-  align-items: flex-end;
+  min-width: 0;
 }
 
 .userName {
   font-size: var(--font-size-sm);
   font-weight: 600;
   color: var(--color-text-primary);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .userRole {
@@ -53,12 +203,18 @@
 }
 
 .logoutBtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  min-height: 2.5rem;
   padding: var(--space-2) var(--space-4);
   background-color: transparent;
   color: var(--color-danger);
   border: 1px solid var(--color-danger);
   border-radius: var(--radius-md);
   font-size: var(--font-size-sm);
+  font-weight: 600;
   cursor: pointer;
   transition:
     background-color var(--transition-fast),
@@ -67,15 +223,45 @@
 
 .logoutBtn:hover {
   background-color: var(--color-danger);
-  color: var(--color-surface);
+  color: var(--color-on-accent);
 }
 
-@media (max-width: 640px) {
-  .navbar {
-    padding: var(--space-3) var(--space-4);
+.menuToggle:focus-visible,
+.link:focus-visible,
+.logoutBtn:focus-visible {
+  outline: none;
+  box-shadow: var(--focus-ring);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sidebar,
+  .backdrop {
+    transition: none;
+  }
+}
+
+/* ---------- Desktop ---------- */
+@media (min-width: 768px) {
+  .topbar,
+  .backdrop {
+    display: none;
   }
 
-  .userInfo {
-    display: none;
+  .sidebar {
+    top: 0;
+    max-width: none;
+    height: 100vh;
+    box-shadow: none;
+    transform: none;
+    visibility: visible;
+    transition: none;
+  }
+
+  .brand {
+    display: flex;
+  }
+
+  .nav {
+    padding-top: var(--space-2);
   }
 }

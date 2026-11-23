@@ -1,6 +1,6 @@
 import { useState, useCallback, useRef } from "react";
 
-type ToastType = "success" | "error" | "warning" | "info";
+import type { ToastType } from "../context/toast.context";
 
 interface ToastState {
   message: string;
@@ -8,7 +8,7 @@ interface ToastState {
   visible: boolean;
 }
 
-const TOAST_DURATION = 3000;
+const TOAST_DURATION = 4000;
 
 export function useToast() {
   const [toast, setToast] = useState<ToastState>({
@@ -24,10 +24,10 @@ export function useToast() {
   }, []);
 
   const showToast = useCallback(
-    (message: string, type: ToastType = "info") => {
+    (message: string, type: ToastType = "info", durationMs = TOAST_DURATION) => {
       if (timerRef.current) clearTimeout(timerRef.current);
       setToast({ message, type, visible: true });
-      timerRef.current = setTimeout(hideToast, TOAST_DURATION);
+      timerRef.current = setTimeout(hideToast, durationMs);
     },
     [hideToast],
   );

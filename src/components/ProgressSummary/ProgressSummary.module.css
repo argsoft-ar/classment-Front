@@ -1,0 +1,94 @@
+.grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--space-3);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.item {
+  --accent: var(--color-primary);
+
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  padding: var(--space-4);
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-top: 4px solid var(--accent);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+}
+
+.value {
+  font-size: var(--font-size-2xl);
+  font-weight: 700;
+  line-height: 1;
+  color: color-mix(in srgb, var(--accent) 80%, var(--color-text-primary));
+}
+
+.label {
+  font-size: var(--font-size-sm);
+  font-weight: 600;
+  color: var(--color-text-secondary);
+}
+
+.item--SIN_CURSAR {
+  --accent: var(--status-sin-cursar);
+}
+
+.item--CURSANDO {
+  --accent: var(--status-cursando);
+}
+
+.item--REGULARIZADA {
+  --accent: var(--status-regularizada);
+}
+
+.item--APROBADA {
+  --accent: var(--status-aprobada);
+}
+
+.item--DESAPROBADA {
+  --accent: var(--status-desaprobada);
+}
+
+.item--LIBRE {
+  --accent: var(--status-libre);
+}
+
+.item--HABILITADA {
+  --accent: var(--status-habilitada);
+}
+
+.item--BLOQUEADA {
+  --accent: var(--status-bloqueada);
+}
+
+.item--ACTIVA {
+  --accent: var(--status-activa);
+}
+
+.item--BAJA {
+  --accent: var(--status-baja);
+}
+
+.item--CERRADA {
+  --accent: var(--status-cerrada);
+}
+
+@media (min-width: 641px) {
+  .grid {
+    grid-template-columns: repeat(auto-fit, minmax(10rem, 1fr));
+    gap: var(--space-4);
+  }
+
+  .item {
+    padding: var(--space-6);
+  }
+
+  .value {
+    font-size: var(--font-size-3xl);
+  }
+}

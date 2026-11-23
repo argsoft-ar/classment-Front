@@ -1,15 +1,14 @@
-import type { ApiResponse, PaginatedResult } from "../types/api.types";
-import type { ISubject } from "../interfaces/subject.interface";
-
-const BASE_URL = import.meta.env.VITE_API_URL as string;
+import { apiClient } from "./api.client";
+import type {
+  CreateSubjectDto,
+  ISubject,
+  UpdateSubjectDto,
+} from "../interfaces/subject.interface";
 
 export const subjectsService = {
-  getAll: async (
-    token: string,
-  ): Promise<ApiResponse<PaginatedResult<ISubject>>> => {
-    const res = await fetch(`${BASE_URL}/subjects`, {
-      headers: { Authorization: `Bearer ${token}` },
-    });
-    return res.json() as Promise<ApiResponse<PaginatedResult<ISubject>>>;
-  },
+  getByCareer: (careerId: string) => apiClient.get<ISubject[]>("/subjects", { careerId }),
+  getById: (id: string) => apiClient.get<ISubject>(`/subjects/${encodeURIComponent(id)}`),
+  create: (dto: CreateSubjectDto) => apiClient.post<ISubject>("/subjects", dto),
+  update: (id: string, dto: UpdateSubjectDto) => apiClient.patch<ISubject>(`/subjects/${encodeURIComponent(id)}`, dto),
+  deactivate: (id: string) => apiClient.delete<null>(`/subjects/${encodeURIComponent(id)}`),
 };

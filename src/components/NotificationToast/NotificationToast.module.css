@@ -1,4 +1,4 @@
-.toast {
+﻿.toast {
   position: fixed;
   bottom: var(--space-6);
   right: var(--space-6);
@@ -27,22 +27,27 @@
 
 .toast--success {
   background-color: var(--color-success);
-  color: #fff;
+  color: var(--color-on-accent);
 }
 
 .toast--error {
   background-color: var(--color-danger);
-  color: #fff;
+  color: var(--color-on-accent);
 }
 
 .toast--warning {
   background-color: var(--color-warning);
-  color: #fff;
+  color: var(--color-on-accent);
 }
 
 .toast--info {
   background-color: var(--color-info);
-  color: #fff;
+  color: var(--color-on-accent);
+}
+
+.typeIcon {
+  flex-shrink: 0;
+  color: currentColor;
 }
 
 .message {
@@ -52,17 +57,28 @@
 }
 
 .closeBtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
   background: transparent;
   border: none;
+  border-radius: var(--radius-md);
   color: inherit;
   cursor: pointer;
   font-size: var(--font-size-base);
-  padding: 0;
+  padding: var(--space-1);
   line-height: 1;
   opacity: 0.8;
   transition: opacity var(--transition-fast);
 }
 
 .closeBtn:hover {
+  opacity: 1;
+}
+
+.closeBtn:focus-visible {
+  outline: 2px solid currentColor;
+  outline-offset: 1px;
   opacity: 1;
 }

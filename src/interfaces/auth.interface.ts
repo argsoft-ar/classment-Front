@@ -1,19 +1,21 @@
+import type { RoleLevel } from "../types/rbac.types";
+import type { IUserPublic } from "./user.interface";
+
 export interface LoginDto {
   email: string;
   password: string;
-  institutionId: string;
 }
 
-export interface LoginResponse {
+export interface LoginResult {
   token: string;
+  user: Pick<IUserPublic, "id" | "email" | "firstName" | "lastName" | "role">;
 }
 
+/** JWT payload signed by the backend: { userId, role, email } + registered claims. */
 export interface DecodedToken {
   userId: string;
-  institutionId: string;
-  role: string;
+  role: RoleLevel | string;
   email: string;
-  // Standard JWT registered claims
   exp: number;
   iat: number;
 }

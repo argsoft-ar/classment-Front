@@ -1,0 +1,76 @@
+.badge {
+  --badge-color: var(--status-sin-cursar);
+
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  border-radius: var(--radius-full);
+  font-weight: 600;
+  line-height: 1.4;
+  white-space: nowrap;
+  color: color-mix(in srgb, var(--badge-color) 75%, var(--color-text-primary));
+  background-color: color-mix(in srgb, var(--badge-color) 12%, transparent);
+  border: 1px solid color-mix(in srgb, var(--badge-color) 30%, transparent);
+}
+
+.badge--sm {
+  padding: 0 var(--space-2);
+  font-size: var(--font-size-xs);
+}
+
+.badge--md {
+  padding: var(--space-1) var(--space-3);
+  font-size: var(--font-size-xs);
+}
+
+.dot {
+  width: 0.5em;
+  height: 0.5em;
+  border-radius: var(--radius-full);
+  background-color: var(--badge-color);
+  flex-shrink: 0;
+}
+
+.badge--SIN_CURSAR {
+  --badge-color: var(--status-sin-cursar);
+}
+
+.badge--CURSANDO {
+  --badge-color: var(--status-cursando);
+}
+
+.badge--REGULARIZADA {
+  --badge-color: var(--status-regularizada);
+}
+
+.badge--APROBADA {
+  --badge-color: var(--status-aprobada);
+}
+
+.badge--DESAPROBADA {
+  --badge-color: var(--status-desaprobada);
+}
+
+.badge--LIBRE {
+  --badge-color: var(--status-libre);
+}
+
+.badge--HABILITADA {
+  --badge-color: var(--status-habilitada);
+}
+
+.badge--BLOQUEADA {
+  --badge-color: var(--status-bloqueada);
+}
+
+.badge--ACTIVA {
+  --badge-color: var(--status-activa);
+}
+
+.badge--BAJA {
+  --badge-color: var(--status-baja);
+}
+
+.badge--CERRADA {
+  --badge-color: var(--status-cerrada);
+}

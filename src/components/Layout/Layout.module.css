@@ -1,21 +1,30 @@
+/* Mobile: content sits below the fixed top bar. Desktop: offset by the fixed sidebar. */
 .layout {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
+  padding-top: var(--topbar-height);
   background-color: var(--color-bg);
 }
 
 .main {
   flex: 1;
-  padding: var(--space-8);
+  padding: var(--space-4);
   max-width: 1280px;
   width: 100%;
   margin: 0 auto;
   box-sizing: border-box;
 }
 
-@media (max-width: 640px) {
+@media (min-width: 641px) {
   .main {
-    padding: var(--space-4);
+    padding: var(--space-8);
+  }
+}
+
+@media (min-width: 768px) {
+  .layout {
+    padding-top: 0;
+    padding-left: var(--sidebar-width);
   }
 }

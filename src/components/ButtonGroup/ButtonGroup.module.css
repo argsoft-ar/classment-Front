@@ -1,0 +1,18 @@
+.group {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.group--start {
+  justify-content: flex-start;
+}
+
+.group--end {
+  justify-content: flex-end;
+}
+
+.group--stretch > * {
+  flex: 1 1 auto;
+}

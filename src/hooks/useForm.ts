@@ -1,4 +1,4 @@
-import { useState, useCallback } from "react";
+import { useState, useCallback, type FormEvent } from "react";
 
 type Validator<T> = (values: T) => Record<string, string>;
 
@@ -19,7 +19,7 @@ export function useForm<T extends Record<string, string>>(
   }, []);
 
   const handleSubmit = useCallback(
-    (onValid: (values: T) => void) => (e: React.FormEvent) => {
+    (onValid: (values: T) => void) => (e: FormEvent) => {
       e.preventDefault();
       const validationErrors = validate ? validate(values) : {};
       if (Object.keys(validationErrors).length > 0) {
@@ -35,10 +35,14 @@ export function useForm<T extends Record<string, string>>(
     setErrors((prev) => ({ ...prev, [name]: message }));
   }, []);
 
-  const reset = useCallback(() => {
-    setValues(initialValues);
-    setErrors({});
-  }, [initialValues]);
+  /** Resets to the initial values, or to `next` (e.g. to prefill an edit form). */
+  const reset = useCallback(
+    (next?: T) => {
+      setValues(next ?? initialValues);
+      setErrors({});
+    },
+    [initialValues],
+  );
 
-  return { values, errors, handleChange, handleSubmit, setError, reset };
+  return { values, errors, handleChange, handleSubmit, setError, setErrors, reset };
 }

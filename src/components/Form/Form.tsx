@@ -4,10 +4,25 @@ import styles from "./Form.module.css";
 export interface FormField {
   name: string;
   label: string;
-  type: "text" | "email" | "password" | "select" | "textarea";
+  type:
+    | "text"
+    | "email"
+    | "password"
+    | "select"
+    | "textarea"
+    | "number"
+    | "date"
+    | "datetime-local"
+    | "checkbox";
   placeholder?: string;
   required?: boolean;
   options?: Array<{ value: string; label: string }>;
+  /** Valor mínimo (number / date / datetime-local) */
+  min?: string | number;
+  /** Valor máximo (number / date / datetime-local) */
+  max?: string | number;
+  /** Deshabilita el campo */
+  disabled?: boolean;
 }
 
 interface FormProps {
@@ -31,7 +46,41 @@ export function Form({
 }: FormProps) {
   return (
     <form className={styles.form} onSubmit={onSubmit} noValidate>
-      {fields.map((field) => (
+      {fields.map((field) =>
+        field.type === "checkbox" ? (
+          <div
+            key={field.name}
+            className={`${styles.fieldGroup} ${styles.checkboxGroup}`}
+          >
+            <div className={styles.checkboxRow}>
+              <input
+                id={field.name}
+                name={field.name}
+                type="checkbox"
+                className={styles.checkbox}
+                checked={values[field.name] === "true"}
+                onChange={(e) =>
+                  onChange(field.name, e.target.checked ? "true" : "false")
+                }
+                required={field.required}
+                disabled={field.disabled}
+                aria-invalid={errors[field.name] ? true : undefined}
+                aria-describedby={
+                  errors[field.name] ? `${field.name}-error` : undefined
+                }
+              />
+              <label className={styles.label} htmlFor={field.name}>
+                {field.label}
+                {field.required && <span className={styles.required}>*</span>}
+              </label>
+            </div>
+            {errors[field.name] && (
+              <span id={`${field.name}-error`} className={styles.errorMsg}>
+                {errors[field.name]}
+              </span>
+            )}
+          </div>
+        ) : (
         <div key={field.name} className={styles.fieldGroup}>
           <label className={styles.label} htmlFor={field.name}>
             {field.label}
@@ -46,6 +95,11 @@ export function Form({
               value={values[field.name] ?? ""}
               onChange={(e) => onChange(field.name, e.target.value)}
               required={field.required}
+              disabled={field.disabled}
+              aria-invalid={errors[field.name] ? true : undefined}
+              aria-describedby={
+                errors[field.name] ? `${field.name}-error` : undefined
+              }
             >
               <option value="">Seleccionar...</option>
               {field.options?.map((opt) => (
@@ -63,6 +117,11 @@ export function Form({
               value={values[field.name] ?? ""}
               onChange={(e) => onChange(field.name, e.target.value)}
               required={field.required}
+              disabled={field.disabled}
+              aria-invalid={errors[field.name] ? true : undefined}
+              aria-describedby={
+                errors[field.name] ? `${field.name}-error` : undefined
+              }
               rows={4}
             />
           ) : (
@@ -75,6 +134,13 @@ export function Form({
               value={values[field.name] ?? ""}
               onChange={(e) => onChange(field.name, e.target.value)}
               required={field.required}
+              disabled={field.disabled}
+              min={field.min}
+              max={field.max}
+              aria-invalid={errors[field.name] ? true : undefined}
+              aria-describedby={
+                errors[field.name] ? `${field.name}-error` : undefined
+              }
               autoComplete={
                 field.type === "password" ? "current-password" : "on"
               }
@@ -82,7 +148,9 @@ export function Form({
           )}
 
           {errors[field.name] && (
-            <span className={styles.errorMsg}>{errors[field.name]}</span>
+            <span id={`${field.name}-error`} className={styles.errorMsg}>
+              {errors[field.name]}
+            </span>
           )}
         </div>
       ))}

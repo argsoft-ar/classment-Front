@@ -13,6 +13,7 @@
   --color-text-primary: #0f172a;
   --color-text-secondary: #64748b;
   --color-text-muted: #94a3b8;
+  --color-on-accent: #ffffff;
 
   /* Typography */
   --font-family: 'Inter', system-ui, -apple-system, sans-serif;
@@ -52,6 +53,31 @@
   --transition-fast: 150ms ease;
   --transition-base: 200ms ease;
   --transition-slow: 300ms ease;
+
+  /* Focus & overlays */
+  --focus-ring: 0 0 0 3px color-mix(in srgb, var(--color-primary) 35%, transparent);
+  --color-overlay: rgb(15 23 42 / 0.55);
+  --z-modal: 1000;
+
+  /* App shell (sidebar navigation) */
+  --sidebar-width: 240px;
+  --topbar-height: 3.75rem;
+  --z-sidebar-backdrop: 880;
+  --z-sidebar: 890;
+  --z-topbar: 900;
+
+  /* Status colors (StatusBadge, ProgressSummary) */
+  --status-sin-cursar: var(--color-text-secondary);
+  --status-cursando: var(--color-info);
+  --status-regularizada: var(--color-warning);
+  --status-aprobada: var(--color-success);
+  --status-desaprobada: var(--color-danger);
+  --status-libre: #ea580c;
+  --status-habilitada: var(--color-success);
+  --status-bloqueada: var(--color-danger);
+  --status-activa: var(--color-success);
+  --status-baja: var(--color-text-secondary);
+  --status-cerrada: #475569;
 }
 
 *,

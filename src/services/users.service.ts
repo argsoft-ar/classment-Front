@@ -1,15 +1,16 @@
-import type { ApiResponse, PaginatedResult } from "../types/api.types";
-import type { IUserPublic } from "../interfaces/user.interface";
-
-const BASE_URL = import.meta.env.VITE_API_URL as string;
+import { apiClient } from "./api.client";
+import type {
+  CreateUserDto,
+  IUserPublic,
+  UpdateUserDto,
+  UsersQuery,
+} from "../interfaces/user.interface";
 
 export const usersService = {
-  getAll: async (
-    token: string,
-  ): Promise<ApiResponse<PaginatedResult<IUserPublic>>> => {
-    const res = await fetch(`${BASE_URL}/users`, {
-      headers: { Authorization: `Bearer ${token}` },
-    });
-    return res.json() as Promise<ApiResponse<PaginatedResult<IUserPublic>>>;
-  },
+  me: () => apiClient.get<IUserPublic>("/users/me"),
+  getAll: (query: UsersQuery = {}) => apiClient.get<IUserPublic[]>("/users", { ...query }),
+  getById: (id: string) => apiClient.get<IUserPublic>(`/users/${encodeURIComponent(id)}`),
+  create: (dto: CreateUserDto) => apiClient.post<IUserPublic>("/users", dto),
+  update: (id: string, dto: UpdateUserDto) => apiClient.patch<IUserPublic>(`/users/${encodeURIComponent(id)}`, dto),
+  deactivate: (id: string) => apiClient.delete<null>(`/users/${encodeURIComponent(id)}`),
 };
