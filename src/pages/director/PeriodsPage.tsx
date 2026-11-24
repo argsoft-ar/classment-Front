@@ -6,11 +6,13 @@ import { Table, type TableColumn } from "../../components/Table/Table";
 import { Button } from "../../components/Button/Button";
 import { ButtonGroup } from "../../components/ButtonGroup/ButtonGroup";
 import { Callout } from "../../components/Callout/Callout";
+import { FilterBar } from "../../components/FilterBar/FilterBar";
 import { Select } from "../../components/Select/Select";
 import { StatusBadge } from "../../components/StatusBadge/StatusBadge";
 import { PageSection } from "../../components/PageSection/PageSection";
 import { FormModal } from "../../components/FormModal/FormModal";
 import { ConfirmModal } from "../../components/ConfirmModal/ConfirmModal";
+import { OfferingRosterModal } from "../../components/OfferingRosterModal/OfferingRosterModal";
 import { usePeriodsPage } from "../../hooks/usePeriodsPage";
 import type { PeriodRow } from "../../hooks/usePeriodsManagement";
 import { periodOptionLabel } from "../../hooks/useOfferingsManagement";
@@ -50,6 +52,7 @@ export function PeriodsPage() {
       render: (p) => (
         <ButtonGroup
           align="end"
+          nowrap
           actions={[
             { label: "Ver ofertas", size: "sm", onClick: () => page.viewOfferings(p) },
             {
@@ -78,15 +81,28 @@ export function PeriodsPage() {
     { key: "maxCapacity", header: "Cupo", align: "center", render: (o) => o.maxCapacity ?? "Libre" },
     {
       key: "actions",
-      header: "",
+      header: "Acciones",
       align: "right",
       render: (o) => (
-        <Button
-          label="Eliminar"
-          size="sm"
-          variant="danger"
-          ariaLabel={`Eliminar oferta de ${o.subject.name}`}
-          onClick={() => offerings.remove(o)}
+        <ButtonGroup
+          align="end"
+          nowrap
+          actions={[
+            {
+              label: "Ver inscriptos",
+              size: "sm",
+              variant: "secondary",
+              ariaLabel: `Ver inscriptos de ${o.subject.name}`,
+              onClick: () => page.roster.open(o),
+            },
+            {
+              label: "Eliminar",
+              size: "sm",
+              variant: "danger",
+              ariaLabel: `Eliminar oferta de ${o.subject.name}`,
+              onClick: () => offerings.remove(o),
+            },
+          ]}
         />
       ),
     },
@@ -136,6 +152,7 @@ export function PeriodsPage() {
             }
           >
             {offerings.error && <Callout variant="danger" message={offerings.error} />}
+            <FilterBar groups={offerings.yearFilterGroups} />
             <Table
               columns={offeringColumns}
               rows={offerings.offerings}
@@ -150,6 +167,7 @@ export function PeriodsPage() {
 
       <FormModal {...periods.formModal} />
       <FormModal {...offerings.formModal} />
+      <OfferingRosterModal {...page.roster.modalProps} />
       <ConfirmModal {...page.confirmModal} />
     </Stack>
   );

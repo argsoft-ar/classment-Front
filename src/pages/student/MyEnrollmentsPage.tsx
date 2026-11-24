@@ -1,6 +1,7 @@
 import { Header } from "../../components/Header/Header";
 import { Stack } from "../../components/Stack/Stack";
 import { Callout } from "../../components/Callout/Callout";
+import { FilterBar } from "../../components/FilterBar/FilterBar";
 import { Table, type TableColumn } from "../../components/Table/Table";
 import { StatusBadge } from "../../components/StatusBadge/StatusBadge";
 import { Button } from "../../components/Button/Button";
@@ -11,7 +12,8 @@ import { MODALITY_LABELS, PERIOD_TYPE_LABELS } from "../../utils/labels.utils";
 import type { IEnrollment } from "../../interfaces/enrollment.interface";
 
 export function MyEnrollmentsPage() {
-  const { enrollments, isLoading, error, drop, canDrop, confirmModal } = useMyEnrollments();
+  const { enrollments, hasAny, filterGroups, isLoading, error, drop, canDrop, confirmModal } =
+    useMyEnrollments();
 
   const columns: TableColumn<IEnrollment>[] = [
     { key: "subject", header: "Materia", render: (e) => e.offering.subject.name },
@@ -43,13 +45,18 @@ export function MyEnrollmentsPage() {
     <Stack gap="lg">
       <Header title="Mis inscripciones" subtitle="Historial de inscripciones a cursadas y finales" />
       {error && <Callout variant="danger" message={error} />}
+      {hasAny && <FilterBar groups={filterGroups} />}
       <Table
         columns={columns}
         rows={enrollments}
         rowKey={(e) => e.id}
         isLoading={isLoading}
         caption="Mis inscripciones"
-        emptyMessage="Todavía no te inscribiste a ninguna cursada o mesa."
+        emptyMessage={
+          hasAny
+            ? "No hay inscripciones con el estado seleccionado."
+            : "Todavía no te inscribiste a ninguna cursada o mesa."
+        }
       />
       <ConfirmModal {...confirmModal} />
     </Stack>

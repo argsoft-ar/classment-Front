@@ -4,7 +4,11 @@ import { useNotify } from "./useNotify";
 import { academicRecordsService } from "../services/academic-records.service";
 import { getErrorMessage } from "../utils/error.utils";
 import { GRID_ORIGIN_OPTIONS } from "../utils/labels.utils";
-import { buildProgressItems, toStatusGroups } from "../utils/progress.utils";
+import {
+  buildProgressItems,
+  buildYearFilterGroups,
+  toStatusGroups,
+} from "../utils/progress.utils";
 import type {
   GridOrigin,
   GridStatus,
@@ -36,9 +40,14 @@ export function useStudentHistory(studentId: string) {
   const { data, isLoading, error, setData } = useAsyncData(loader);
   const [edits, setEdits] = useState<Record<string, ProgressStatus>>({});
   const [origin, setOrigin] = useState<GridOrigin>("CARGA_INICIAL");
+  const [yearFilter, setYearFilter] = useState<string>("ALL");
   const [isSaving, setIsSaving] = useState(false);
 
   const career = data?.careers[0] ?? null;
+  const years = career?.years ?? [];
+  const visibleYears =
+    yearFilter === "ALL" ? years : years.filter((y) => String(y.yearLevel) === yearFilter);
+
   const originalStatus = (subjectId: string): ProgressStatus | undefined =>
     career?.years.flatMap((y) => y.subjects).find((s) => s.subjectId === subjectId)?.status;
 
@@ -87,6 +96,7 @@ export function useStudentHistory(studentId: string) {
   };
 
   const student = data?.student;
+  const modifiedIds = new Set(Object.keys(edits));
 
   return {
     isLoading: isLoading && !data,
@@ -97,7 +107,8 @@ export function useStudentHistory(studentId: string) {
       : "",
     hasCareer: career !== null,
     summaryItems: career ? buildProgressItems(career.summary) : [],
-    groups: career ? toStatusGroups(career.years, edits) : [],
+    filterGroups: buildYearFilterGroups(years, yearFilter, setYearFilter),
+    groups: career ? toStatusGroups(visibleYears, edits, modifiedIds) : [],
     statusOptions: GRID_STATUSES,
     onStatusChange,
     origin,

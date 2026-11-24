@@ -4,8 +4,9 @@ import { Tabs } from "../../components/Tabs/Tabs";
 import { Callout } from "../../components/Callout/Callout";
 import { LoadingState } from "../../components/LoadingState/LoadingState";
 import { EmptyState } from "../../components/EmptyState/EmptyState";
+import { FilterBar } from "../../components/FilterBar/FilterBar";
 import { PageSection } from "../../components/PageSection/PageSection";
-import { OfferingCard } from "../../components/OfferingCard/OfferingCard";
+import { OfferingList } from "../../components/OfferingList/OfferingList";
 import { Modal } from "../../components/Modal/Modal";
 import { RejectionReasonList } from "../../components/RejectionReasonList/RejectionReasonList";
 import { ConfirmModal } from "../../components/ConfirmModal/ConfirmModal";
@@ -32,20 +33,38 @@ export function StudentEnrollmentPage() {
           onChange={offers.onTabChange}
           ariaLabel="Tipo de inscripción"
         >
-          {offers.sections.length === 0 ? (
+          {!offers.hasOfferingsInTab ? (
             <EmptyState
               title={offers.emptyTitle}
               description="Cuando se abra un período de inscripción vas a verlo acá."
             />
           ) : (
-            <Stack gap="xl">
-              {offers.sections.map((section) => (
-                <PageSection key={section.id} title={section.title} description={section.description}>
-                  {section.cards.map((card) => (
-                    <OfferingCard key={card.id} {...card.props} />
+            <Stack gap="lg">
+              <FilterBar groups={offers.filterGroups} />
+
+              {offers.sections.length === 0 ? (
+                <EmptyState
+                  title="Sin resultados para este filtro"
+                  description="No hay materias que coincidan con los filtros seleccionados."
+                  action={
+                    offers.hasActiveFilters
+                      ? { label: "Limpiar filtros", variant: "secondary", onClick: offers.clearFilters }
+                      : undefined
+                  }
+                />
+              ) : (
+                <Stack gap="xl">
+                  {offers.sections.map((section) => (
+                    <PageSection
+                      key={section.id}
+                      title={section.title}
+                      description={section.description}
+                    >
+                      <OfferingList groups={section.groups} />
+                    </PageSection>
                   ))}
-                </PageSection>
-              ))}
+                </Stack>
+              )}
             </Stack>
           )}
         </Tabs>

@@ -96,10 +96,12 @@ export function useCorrelativesEditor(subjects: ISubjectSummary[], onChanged: ()
       label: "Materia requerida",
       type: "select",
       required: true,
-      options: subjects.map((s) => ({
-        value: s.id,
-        label: `${s.name} (${yearLabel(s.yearLevel)})`,
-      })),
+      options: subjects
+        .filter((s) => s.id !== subjectId)
+        .map((s) => ({
+          value: s.id,
+          label: `${s.name} (${yearLabel(s.yearLevel)})`,
+        })),
     },
     { name: "appliesTo", label: "Aplica a", type: "select", required: true, options: SCOPES },
     {

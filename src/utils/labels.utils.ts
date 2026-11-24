@@ -54,3 +54,10 @@ export const yearLabel = (yearLevel: number): string => `${yearLevel}° Año`;
 
 export const callLabel = (callNumber: number | null): string =>
   callNumber ? `${callNumber}° llamado` : "—";
+
+export function formatPeriodTitle(period: { name: string; callNumber: number | null }): string {
+  if (period.callNumber && !period.name.toLowerCase().includes("llamado")) {
+    return `${period.name} · ${callLabel(period.callNumber)}`;
+  }
+  return period.name;
+}

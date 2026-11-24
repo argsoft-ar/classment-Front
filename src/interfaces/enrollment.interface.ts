@@ -26,6 +26,26 @@ export interface IEnrollment {
   };
 }
 
+/** GET /offerings/:id/enrollments (Directivo / Docente) */
+export interface IOfferingEnrollment {
+  id: string;
+  offeringId: string;
+  studentId: string;
+  modality: EnrollmentModality;
+  status: EnrollmentStatus;
+  grade: string | null;
+  result: EnrollmentResult | null;
+  createdAt: string;
+  updatedAt: string;
+  student: {
+    id: string;
+    dni: string;
+    firstName: string;
+    lastName: string;
+    email: string;
+  };
+}
+
 /** studentId is never sent: the backend takes it from the JWT. */
 export interface CreateEnrollmentDto {
   offeringId: string;

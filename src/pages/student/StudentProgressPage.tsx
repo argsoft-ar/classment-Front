@@ -3,6 +3,7 @@ import { Stack } from "../../components/Stack/Stack";
 import { Callout } from "../../components/Callout/Callout";
 import { LoadingState } from "../../components/LoadingState/LoadingState";
 import { EmptyState } from "../../components/EmptyState/EmptyState";
+import { FilterBar } from "../../components/FilterBar/FilterBar";
 import { PageSection } from "../../components/PageSection/PageSection";
 import { ProgressSummary } from "../../components/ProgressSummary/ProgressSummary";
 import { SubjectStatusGrid } from "../../components/SubjectStatusGrid/SubjectStatusGrid";
@@ -14,7 +15,15 @@ export function StudentProgressPage() {
 
   return (
     <Stack gap="lg">
-      <Header title={progress.title} subtitle={progress.subtitle} />
+      <Header
+        title={progress.title}
+        subtitle={progress.subtitle}
+        actions={
+          progress.hasCareer ? (
+            <Button label="Ir a inscripciones" onClick={progress.goToEnrollment} />
+          ) : undefined
+        }
+      />
       {progress.error && <Callout variant="danger" message={progress.error} />}
 
       {progress.isLoading ? (
@@ -27,13 +36,8 @@ export function StudentProgressPage() {
       ) : (
         <Stack gap="lg">
           <ProgressSummary items={progress.summaryItems} ariaLabel="Resumen de tu carrera" />
-          <Button
-            label="Ir a inscripciones"
-            onClick={progress.goToEnrollment}
-            fullWidth
-            size="lg"
-          />
           <PageSection title="Mi plan de estudios" description="Estado de cada materia por año.">
+            <FilterBar groups={progress.filterGroups} />
             <SubjectStatusGrid groups={progress.groups} />
           </PageSection>
         </Stack>

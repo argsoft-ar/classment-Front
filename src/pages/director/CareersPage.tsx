@@ -25,6 +25,7 @@ export function CareersPage() {
       render: (c) => (
         <ButtonGroup
           align="end"
+          nowrap
           actions={[
             { label: "Materias y correlatividades", size: "sm", onClick: () => goToSubjects(c) },
             { label: "Editar", size: "sm", variant: "secondary", onClick: () => openEdit(c) },

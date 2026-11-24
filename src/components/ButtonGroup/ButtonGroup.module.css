@@ -16,3 +16,9 @@
 .group--stretch > * {
   flex: 1 1 auto;
 }
+
+@media (min-width: 641px) {
+  .group--nowrap {
+    flex-wrap: nowrap;
+  }
+}

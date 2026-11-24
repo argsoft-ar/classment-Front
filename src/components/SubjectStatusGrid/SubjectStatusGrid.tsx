@@ -16,6 +16,10 @@ export interface StatusGridSubject {
   name: string;
   /** Estado actual */
   status: SubjectStatus;
+  /** Información complementaria opcional (ej. Nota, Equivalencia) */
+  meta?: string;
+  /** Resalta la tarjeta cuando hay cambios sin guardar */
+  isModified?: boolean;
 }
 
 export interface StatusGridGroup {
@@ -69,19 +73,29 @@ export function SubjectStatusGrid({
     <div className={styles.grid}>
       {sortedGroups.map((group) => {
         const headingId = `${baseId}-year-${group.yearLevel}`;
+        const total = group.subjects.length;
+        const approved = group.subjects.filter((s) => s.status === "APROBADA").length;
+        const pct = total > 0 ? Math.round((approved / total) * 100) : 0;
+
         return (
           <section
             key={group.yearLevel}
             className={styles.group}
             aria-labelledby={headingId}
           >
-            <h3 id={headingId} className={styles.groupTitle}>
-              {group.yearLevel}° Año
-              <span className={styles.groupCount}>
-                {group.subjects.length}{" "}
-                {group.subjects.length === 1 ? "materia" : "materias"}
-              </span>
-            </h3>
+            <div className={styles.groupHeader}>
+              <h3 id={headingId} className={styles.groupTitle}>
+                <span>{group.yearLevel}° Año</span>
+                <span className={styles.groupCount}>
+                  {total} {total === 1 ? "materia" : "materias"} · {approved}/{total} aprobadas
+                </span>
+              </h3>
+              {total > 0 && (
+                <div className={styles.progressTrack} aria-hidden="true">
+                  <div className={styles.progressFill} style={{ width: `${pct}%` }} />
+                </div>
+              )}
+            </div>
 
             <ul className={styles.list}>
               {group.subjects.map((subject) => {
@@ -89,9 +103,14 @@ export function SubjectStatusGrid({
                 return (
                   <li
                     key={subject.id}
-                    className={`${styles.item} ${styles[`item--${subject.status}`]}`}
+                    className={`${styles.item} ${styles[`item--${subject.status}`]} ${
+                      subject.isModified ? styles.itemModified : ""
+                    }`}
                   >
-                    <span className={styles.subjectName}>{subject.name}</span>
+                    <div className={styles.subjectInfo}>
+                      <span className={styles.subjectName}>{subject.name}</span>
+                      {subject.meta && <span className={styles.subjectMeta}>{subject.meta}</span>}
+                    </div>
                     {editable ? (
                       <div className={styles.control}>
                         <Select

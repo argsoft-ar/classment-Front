@@ -1,6 +1,7 @@
 import { useId } from "react";
 import { CircleX } from "lucide-react";
 import { StatusBadge } from "../StatusBadge/StatusBadge";
+import { STATUS_LABELS } from "../StatusBadge/status";
 import type { RejectionReason } from "./RejectionReason.types";
 import styles from "./RejectionReasonList.module.css";
 
@@ -11,6 +12,16 @@ export interface RejectionReasonListProps {
   reasons: RejectionReason[];
   /** Título de la lista */
   title?: string;
+}
+
+function formatReasonMessage(message: string): string {
+  let formatted = message;
+  for (const [key, label] of Object.entries(STATUS_LABELS)) {
+    // Reemplaza ocurrencias de palabras de estado en mayúsculas (ej: REGULARIZADA -> Regularizada)
+    const regex = new RegExp(`\\b${key}\\b`, "g");
+    formatted = formatted.replace(regex, label);
+  }
+  return formatted;
 }
 
 export function RejectionReasonList({
@@ -40,7 +51,7 @@ export function RejectionReasonList({
           >
             <CircleX className={styles.icon} size={20} aria-hidden="true" />
             <div className={styles.content}>
-              <p className={styles.message}>{reason.message}</p>
+              <p className={styles.message}>{formatReasonMessage(reason.message)}</p>
 
               {reason.requiredSubjectName && (
                 <p className={styles.subject}>

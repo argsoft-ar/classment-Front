@@ -169,6 +169,7 @@
     padding: var(--space-3) var(--space-4);
     text-align: left;
     vertical-align: middle;
+    white-space: nowrap;
   }
 
   .row:not(:last-child) .cell,

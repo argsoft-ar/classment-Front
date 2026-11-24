@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { usePeriodsManagement, type PeriodRow } from "./usePeriodsManagement";
 import { useOfferingsManagement } from "./useOfferingsManagement";
+import { useOfferingRoster } from "./useOfferingRoster";
 import { useConfirm } from "./useConfirm";
 import type { TabItem } from "../components/Tabs/Tabs";
 
@@ -12,6 +13,7 @@ export function usePeriodsPage() {
   const confirm = useConfirm();
   const periods = usePeriodsManagement();
   const offerings = useOfferingsManagement(periods.periods, periods.reload, confirm.request);
+  const roster = useOfferingRoster();
 
   const tabs: TabItem[] = [
     { id: "periods", label: "Períodos", count: periods.periods.length },
@@ -31,6 +33,7 @@ export function usePeriodsPage() {
     onTabChange,
     periods,
     offerings,
+    roster,
     viewOfferings,
     confirmModal: confirm.modalProps,
   };

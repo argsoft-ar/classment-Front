@@ -9,10 +9,11 @@ import { subjectsService } from "../services/subjects.service";
 import { usersService } from "../services/users.service";
 import { getErrorMessage } from "../utils/error.utils";
 import { fromDateTimeLocal } from "../utils/date.utils";
-import { callLabel, yearLabel } from "../utils/labels.utils";
+import { formatPeriodTitle, yearLabel } from "../utils/labels.utils";
 import { RoleLevel } from "../types/rbac.types";
 import type { IEnrollmentPeriod } from "../interfaces/enrollment-period.interface";
 import type { IOffering } from "../interfaces/offering.interface";
+import type { FilterBarGroup } from "../components/FilterBar/FilterBar";
 import type { FormField } from "../components/Form/Form";
 import type { FormModalProps } from "../components/FormModal/FormModal";
 import type { SelectOption } from "../components/Select/Select";
@@ -66,8 +67,7 @@ async function loadOfferingsData() {
   return { offerings, careers, teachers, subjectsByCareer };
 }
 
-export const periodOptionLabel = (p: IEnrollmentPeriod) =>
-  p.callNumber ? `${p.name} (${callLabel(p.callNumber)})` : p.name;
+export const periodOptionLabel = (p: IEnrollmentPeriod) => formatPeriodTitle(p);
 
 export function useOfferingsManagement(
   periods: IEnrollmentPeriod[],
@@ -77,6 +77,7 @@ export function useOfferingsManagement(
   const notify = useNotify();
   const { data, isLoading, error, reload } = useAsyncData(loadOfferingsData);
   const [periodFilter, setPeriodFilter] = useState<string>(ALL_PERIODS);
+  const [yearFilter, setYearFilter] = useState<string>("ALL");
   const modal = useModalForm<OfferingFormValues>(INITIAL_VALUES, validateOffering);
 
   const careers = data?.careers ?? [];
@@ -168,23 +169,54 @@ export function useOfferingsManagement(
       },
     });
 
-  const offerings = (data?.offerings ?? []).filter(
+  const byPeriod = (data?.offerings ?? []).filter(
     (o) => periodFilter === ALL_PERIODS || o.periodId === periodFilter,
   );
+  const years = [...new Set(byPeriod.map((o) => o.subject.yearLevel))].sort((a, b) => a - b);
+  const yearFilterGroups: FilterBarGroup[] =
+    years.length > 1
+      ? [
+          {
+            id: "year",
+            label: "Año",
+            value: yearFilter,
+            onChange: setYearFilter,
+            options: [
+              { value: "ALL", label: "Todos", count: byPeriod.length },
+              ...years.map((y) => ({
+                value: String(y),
+                label: yearLabel(y),
+                count: byPeriod.filter((o) => o.subject.yearLevel === y).length,
+              })),
+            ],
+          },
+        ]
+      : [];
+
+  const offerings =
+    yearFilter === "ALL"
+      ? byPeriod
+      : byPeriod.filter((o) => String(o.subject.yearLevel) === yearFilter);
+
+  const handlePeriodFilterChange = (value: string) => {
+    setPeriodFilter(value);
+    setYearFilter("ALL");
+  };
 
   return {
     offerings,
     isLoading,
     error,
+    yearFilterGroups,
     filter: {
       name: "periodFilter",
       label: "Filtrar por período",
       value: periodFilter,
       options: periodOptions,
       placeholder: "Todos los períodos",
-      onChange: setPeriodFilter,
+      onChange: handlePeriodFilterChange,
     },
-    setPeriodFilter,
+    setPeriodFilter: handlePeriodFilterChange,
     openCreate: () =>
       modal.openCreate({
         periodId: periodFilter,
