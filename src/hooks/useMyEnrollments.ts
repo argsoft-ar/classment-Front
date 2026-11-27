@@ -7,7 +7,7 @@ import { getErrorMessage } from "../utils/error.utils";
 import type { IEnrollment } from "../interfaces/enrollment.interface";
 import type { FilterBarGroup } from "../components/FilterBar/FilterBar";
 
-type EnrollmentStatusFilter = "ALL" | "ACTIVA" | "BAJA";
+type EnrollmentStatusFilter = "ALL" | "ACTIVA" | "CERRADA" | "BAJA";
 
 export function useMyEnrollments() {
   const notify = useNotify();
@@ -18,6 +18,7 @@ export function useMyEnrollments() {
 
   const allEnrollments = data ?? [];
   const activeCount = allEnrollments.filter((e) => e.status === "ACTIVA").length;
+  const closedCount = allEnrollments.filter((e) => e.status === "CERRADA").length;
   const droppedCount = allEnrollments.filter((e) => e.status === "BAJA").length;
 
   const filterGroups: FilterBarGroup[] =
@@ -31,6 +32,7 @@ export function useMyEnrollments() {
             options: [
               { value: "ALL", label: "Todas", count: allEnrollments.length },
               { value: "ACTIVA", label: "Activas", count: activeCount },
+              { value: "CERRADA", label: "Cerradas", count: closedCount },
               { value: "BAJA", label: "Dadas de baja", count: droppedCount },
             ],
           },

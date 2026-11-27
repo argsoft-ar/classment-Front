@@ -24,6 +24,8 @@ export const ROUTES = {
     studentHistory: (studentId: string) =>
       `/director/alumnos/${encodeURIComponent(studentId)}/historial`,
     periods: "/director/periodos",
+    offeringGrades: (offeringId: string) =>
+      `/director/ofertas/${encodeURIComponent(offeringId)}`,
     institution: "/director/institucion",
   },
   student: {
@@ -33,6 +35,8 @@ export const ROUTES = {
   },
   teacher: {
     offerings: "/docente",
+    offeringGrades: (offeringId: string) =>
+      `/docente/ofertas/${encodeURIComponent(offeringId)}`,
   },
 } as const;
 

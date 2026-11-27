@@ -54,6 +54,10 @@
   --accent: var(--status-desaprobada);
 }
 
+.item--AUSENTE {
+  --accent: var(--status-ausente);
+}
+
 .item--LIBRE {
   --accent: var(--status-libre);
 }

@@ -14,7 +14,8 @@ export type BadgeStatus =
   | "BLOQUEADA"
   | "ACTIVA"
   | "BAJA"
-  | "CERRADA";
+  | "CERRADA"
+  | "AUSENTE";
 
 /** Etiquetas en español por defecto */
 export const STATUS_LABELS: Record<BadgeStatus, string> = {
@@ -23,6 +24,7 @@ export const STATUS_LABELS: Record<BadgeStatus, string> = {
   REGULARIZADA: "Regularizada",
   APROBADA: "Aprobada",
   DESAPROBADA: "Desaprobada",
+  AUSENTE: "Ausente",
   LIBRE: "Libre",
   HABILITADA: "Habilitada",
   BLOQUEADA: "Bloqueada",

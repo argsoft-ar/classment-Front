@@ -72,6 +72,7 @@
   --status-regularizada: var(--color-warning);
   --status-aprobada: var(--color-success);
   --status-desaprobada: var(--color-danger);
+  --status-ausente: var(--color-text-secondary);
   --status-libre: #ea580c;
   --status-habilitada: var(--color-success);
   --status-bloqueada: var(--color-danger);

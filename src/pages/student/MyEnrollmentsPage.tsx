@@ -8,7 +8,7 @@ import { Button } from "../../components/Button/Button";
 import { ConfirmModal } from "../../components/ConfirmModal/ConfirmModal";
 import { useMyEnrollments } from "../../hooks/useMyEnrollments";
 import { formatDateTime } from "../../utils/date.utils";
-import { MODALITY_LABELS, PERIOD_TYPE_LABELS } from "../../utils/labels.utils";
+import { MODALITY_LABELS, PERIOD_TYPE_LABELS, formatGrade } from "../../utils/labels.utils";
 import type { IEnrollment } from "../../interfaces/enrollment.interface";
 
 export function MyEnrollmentsPage() {
@@ -22,6 +22,12 @@ export function MyEnrollmentsPage() {
     { key: "modality", header: "Modalidad", render: (e) => MODALITY_LABELS[e.modality] },
     { key: "examDate", header: "Fecha de examen", render: (e) => formatDateTime(e.offering.examDate) },
     { key: "status", header: "Estado", render: (e) => <StatusBadge status={e.status} size="sm" /> },
+    {
+      key: "result",
+      header: "Resultado",
+      render: (e) => (e.result ? <StatusBadge status={e.result} size="sm" /> : "—"),
+    },
+    { key: "grade", header: "Nota", align: "center", render: (e) => formatGrade(e.grade) },
     {
       key: "actions",
       header: "",

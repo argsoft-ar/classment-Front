@@ -43,6 +43,13 @@ const EXACT_MESSAGES: Record<string, string> = {
     "Con promoción habilitada, la nota de promoción es obligatoria y debe ser mayor o igual a la de aprobación.",
   "You cannot deactivate your own account": "No podés desactivar tu propia cuenta.",
   "Cannot activate a user without a password": "No se puede activar un usuario sin contraseña.",
+  "Closed enrollments can only be rectified by Directivo or SuperAdmin":
+    "Las actas ya cerradas solo pueden ser rectificadas por Dirección.",
+  "Cannot grade a dropped enrollment": "No se puede calificar una inscripción dada de baja.",
+  "Some enrollments do not belong to this offering":
+    "Algunas inscripciones no pertenecen a esta oferta.",
+  "Validation error in grade entries":
+    "Revisá las notas y resultados marcados antes de guardar.",
 };
 
 /** Backend message prefixes with dynamic content → Spanish UI text. */
@@ -114,4 +121,28 @@ export function getRejection(error: unknown): IEnrollmentValidationResult | null
     return error.errors;
   }
   return null;
+}
+
+export interface IGradeValidationError {
+  enrollmentId: string;
+  code: string;
+  message: string;
+}
+
+/** Extracts per-enrollment grade validation errors returned by PUT /offerings/:id/grades (422). */
+export function getGradeErrors(error: unknown): Record<string, string> {
+  if (!(error instanceof ApiError) || error.status !== 422 || !Array.isArray(error.errors)) {
+    return {};
+  }
+  const byEnrollment: Record<string, string> = {};
+  for (const item of error.errors) {
+    if (
+      isRecord(item) &&
+      typeof item.enrollmentId === "string" &&
+      typeof item.message === "string"
+    ) {
+      byEnrollment[item.enrollmentId] = item.message;
+    }
+  }
+  return byEnrollment;
 }

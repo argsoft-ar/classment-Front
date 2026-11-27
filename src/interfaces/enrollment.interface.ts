@@ -51,3 +51,14 @@ export interface CreateEnrollmentDto {
   offeringId: string;
   modality: EnrollmentModality;
 }
+
+/** PUT /offerings/:id/grades (Directivo / SuperAdmin / Docente) */
+export interface GradeEntryDto {
+  enrollmentId: string;
+  result: EnrollmentResult;
+  grade: number | null;
+}
+
+export interface RecordOfferingGradesDto {
+  entries: GradeEntryDto[];
+}

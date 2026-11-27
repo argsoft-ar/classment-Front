@@ -1,6 +1,5 @@
 import { useCallback, useState } from "react";
 import { useAsyncData } from "./useAsyncData";
-import { useOfferingRoster } from "./useOfferingRoster";
 import { offeringsService } from "../services/offerings.service";
 import type { FilterBarGroup } from "../components/FilterBar/FilterBar";
 import type { PeriodType } from "../interfaces/enrollment-period.interface";
@@ -12,7 +11,6 @@ export function useTeacherOfferings() {
   const loader = useCallback(() => offeringsService.getAll(), []);
   const { data, isLoading, error } = useAsyncData(loader);
   const [typeFilter, setTypeFilter] = useState<OfferingTypeFilter>("ALL");
-  const roster = useOfferingRoster();
 
   const allOfferings = data ?? [];
   const cursadaCount = allOfferings.filter((o) => o.period.type === "CURSADA").length;
@@ -44,7 +42,6 @@ export function useTeacherOfferings() {
     offerings,
     hasAny: allOfferings.length > 0,
     filterGroups,
-    roster,
     isLoading: isLoading && !data,
     error,
   };

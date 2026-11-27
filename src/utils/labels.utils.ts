@@ -1,6 +1,7 @@
 import type { CorrelativeScope, RequiredStatus } from "../interfaces/correlative.interface";
 import type { PeriodType } from "../interfaces/enrollment-period.interface";
 import type { EnrollmentModality } from "../interfaces/offering.interface";
+import type { EnrollmentResult } from "../interfaces/enrollment.interface";
 import type { GridOrigin, RecordOrigin } from "../interfaces/academic-record.interface";
 import type { UserStatus } from "../interfaces/user.interface";
 
@@ -17,6 +18,13 @@ export const PERIOD_TYPE_LABELS: Record<PeriodType, string> = {
 export const MODALITY_LABELS: Record<EnrollmentModality, string> = {
   REGULAR: "Regular",
   LIBRE: "Libre",
+};
+
+export const ENROLLMENT_RESULT_LABELS: Record<EnrollmentResult, string> = {
+  REGULARIZADA: "Regularizada",
+  APROBADA: "Aprobada",
+  DESAPROBADA: "Desaprobada",
+  AUSENTE: "Ausente",
 };
 
 export const SCOPE_LABELS: Record<CorrelativeScope, string> = {
@@ -60,4 +68,21 @@ export function formatPeriodTitle(period: { name: string; callNumber: number | n
     return `${period.name} · ${callLabel(period.callNumber)}`;
   }
   return period.name;
+}
+
+/** Normalizes serialized Prisma Decimal grades (e.g. "8.00") to integer display string ("8"). */
+export function formatGrade(grade: string | number | null | undefined): string {
+  if (grade === null || grade === undefined || grade === "") return "—";
+  const parsed = Number(grade);
+  return Number.isFinite(parsed) ? String(Math.round(parsed)) : "—";
+}
+
+export function formatOfferingEnrollmentCount(offering: {
+  _count: { enrollments: number };
+  closedEnrollmentsCount?: number;
+}): string {
+  const total = offering._count.enrollments;
+  const closed = offering.closedEnrollmentsCount ?? 0;
+  if (total === 0 || closed === 0) return String(total);
+  return `${total} (${closed} ${closed === 1 ? "cerrada" : "cerradas"})`;
 }

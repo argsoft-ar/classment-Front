@@ -24,6 +24,7 @@ export interface IOffering {
   subject: { id: string; name: string; yearLevel: number; studyPlanId: string };
   teacher: IOfferingTeacher | null;
   _count: { enrollments: number };
+  closedEnrollmentsCount?: number;
 }
 
 /** GET /offerings/available (Alumno) — each offering validated by the correlatives engine. */

@@ -1,0 +1,274 @@
+.wrapper {
+  width: 100%;
+}
+
+.table {
+  display: block;
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--font-size-sm);
+  color: var(--color-text-primary);
+}
+
+.caption,
+.thead {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.tbody {
+  display: block;
+}
+
+.row {
+  display: block;
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-left: 3px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+  padding: var(--space-3) var(--space-4);
+  margin-bottom: var(--space-3);
+  transition: background-color var(--transition-fast);
+}
+
+.rowClosed {
+  border-left-color: var(--status-cerrada);
+  background-color: color-mix(in srgb, var(--color-bg) 55%, var(--color-surface));
+}
+
+.rowModified {
+  border-left-color: var(--color-primary);
+  background-color: color-mix(in srgb, var(--color-primary) 5%, var(--color-surface));
+}
+
+.rowInvalid {
+  border-left-color: var(--color-danger);
+}
+
+.cell {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  padding: var(--space-2) 0;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.cell:last-child {
+  border-bottom: none;
+}
+
+.cell::before {
+  content: attr(data-label);
+  flex-shrink: 0;
+  font-size: var(--font-size-xs);
+  font-weight: 600;
+  color: var(--color-text-secondary);
+}
+
+.studentBlock {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 2px;
+  text-align: right;
+  min-width: 0;
+}
+
+.studentName {
+  font-weight: 600;
+  color: var(--color-text-primary);
+}
+
+.studentMeta {
+  font-size: var(--font-size-xs);
+  color: var(--color-text-secondary);
+}
+
+.controlCell {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: var(--space-1);
+  min-width: 10rem;
+}
+
+.gradeInput {
+  width: 5.5rem;
+  min-height: 2.25rem;
+  padding: var(--space-1) var(--space-2);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  font-family: var(--font-family);
+  font-size: var(--font-size-sm);
+  font-weight: 600;
+  text-align: center;
+  color: var(--color-text-primary);
+  background-color: var(--color-surface);
+  outline: none;
+  transition:
+    border-color var(--transition-fast),
+    box-shadow var(--transition-fast);
+}
+
+.gradeInput:focus-visible {
+  border-color: var(--color-primary);
+  box-shadow: var(--focus-ring);
+}
+
+.gradeInput:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+  background-color: var(--color-bg);
+}
+
+.gradeInputError {
+  border-color: var(--color-danger);
+}
+
+.gradeInputError:focus-visible {
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-danger) 15%, transparent);
+}
+
+.readOnlyGrade {
+  font-weight: 700;
+  font-size: var(--font-size-base);
+  color: var(--color-text-primary);
+}
+
+.readOnlyHint {
+  font-size: var(--font-size-xs);
+  color: var(--color-text-muted);
+}
+
+.rowError {
+  font-size: var(--font-size-xs);
+  font-weight: 500;
+  color: var(--color-danger);
+}
+
+.modifiedTag {
+  font-size: var(--font-size-xs);
+  font-weight: 600;
+  color: var(--color-primary);
+}
+
+@media (min-width: 641px) {
+  .wrapper {
+    overflow: auto;
+    background-color: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-sm);
+  }
+
+  .table {
+    display: table;
+  }
+
+  .thead {
+    position: static;
+    width: auto;
+    height: auto;
+    margin: 0;
+    overflow: visible;
+    clip: auto;
+    white-space: normal;
+    display: table-header-group;
+  }
+
+  .tbody {
+    display: table-row-group;
+  }
+
+  .th {
+    padding: var(--space-3) var(--space-4);
+    background-color: var(--color-bg);
+    box-shadow: inset 0 -1px 0 var(--color-border);
+    font-size: var(--font-size-xs);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--color-text-secondary);
+    text-align: left;
+    white-space: nowrap;
+  }
+
+  .thCenter {
+    text-align: center;
+  }
+
+  .row {
+    display: table-row;
+    border: none;
+    border-radius: 0;
+    box-shadow: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  .row:hover {
+    background-color: color-mix(in srgb, var(--color-primary) 4%, transparent);
+  }
+
+  .rowClosed {
+    background-color: color-mix(in srgb, var(--color-bg) 45%, var(--color-surface));
+  }
+
+  .rowModified {
+    background-color: color-mix(in srgb, var(--color-primary) 6%, var(--color-surface));
+  }
+
+  .rowModified:hover {
+    background-color: color-mix(in srgb, var(--color-primary) 9%, var(--color-surface));
+  }
+
+  .cell {
+    display: table-cell;
+    padding: var(--space-3) var(--space-4);
+    vertical-align: middle;
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .row:last-child .cell {
+    border-bottom: none;
+  }
+
+  .cell::before {
+    content: none;
+  }
+
+  .rowClosed .cell:first-child {
+    box-shadow: inset 3px 0 0 var(--status-cerrada);
+  }
+
+  .rowModified .cell:first-child {
+    box-shadow: inset 3px 0 0 var(--color-primary);
+  }
+
+  .rowInvalid .cell:first-child {
+    box-shadow: inset 3px 0 0 var(--color-danger);
+  }
+
+  .studentBlock {
+    align-items: flex-start;
+    text-align: left;
+  }
+
+  .controlCell {
+    align-items: flex-start;
+    min-width: 12.5rem;
+  }
+
+  .gradeCell {
+    text-align: center;
+  }
+}

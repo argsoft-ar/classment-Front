@@ -88,6 +88,10 @@ function classifyOffering(
     return { visualState: "AVAILABLE" };
   }
 
+  if (reasons.some((r) => r.code === "ALREADY_GRADED")) {
+    return { visualState: "BLOCKED", summaryHint: "Ya evaluada en este turno" };
+  }
+
   if (o.period.type === "CURSADA") {
     if (reasons.some((r) => r.code === "ALREADY_APPROVED")) {
       return { visualState: "ALREADY_APPROVED", summaryHint: "Ya aprobaste esta materia" };

@@ -1,3 +1,4 @@
+import { useNavigate } from "react-router-dom";
 import { Header } from "../../components/Header/Header";
 import { Breadcrumbs } from "../../components/Breadcrumbs/Breadcrumbs";
 import { Stack } from "../../components/Stack/Stack";
@@ -12,17 +13,22 @@ import { StatusBadge } from "../../components/StatusBadge/StatusBadge";
 import { PageSection } from "../../components/PageSection/PageSection";
 import { FormModal } from "../../components/FormModal/FormModal";
 import { ConfirmModal } from "../../components/ConfirmModal/ConfirmModal";
-import { OfferingRosterModal } from "../../components/OfferingRosterModal/OfferingRosterModal";
 import { usePeriodsPage } from "../../hooks/usePeriodsPage";
 import type { PeriodRow } from "../../hooks/usePeriodsManagement";
 import { periodOptionLabel } from "../../hooks/useOfferingsManagement";
 import { ROUTES } from "../../config/navigation.config";
 import { formatDateTime } from "../../utils/date.utils";
-import { PERIOD_TYPE_LABELS, callLabel, yearLabel } from "../../utils/labels.utils";
+import {
+  PERIOD_TYPE_LABELS,
+  callLabel,
+  formatOfferingEnrollmentCount,
+  yearLabel,
+} from "../../utils/labels.utils";
 import { PERIOD_STATE_BADGE } from "../../utils/period.utils";
 import type { IOffering } from "../../interfaces/offering.interface";
 
 export function PeriodsPage() {
+  const navigate = useNavigate();
   const page = usePeriodsPage();
   const { periods, offerings } = page;
 
@@ -77,7 +83,12 @@ export function PeriodsPage() {
       render: (o) => (o.teacher ? `${o.teacher.lastName}, ${o.teacher.firstName}` : "Sin asignar"),
     },
     { key: "examDate", header: "Fecha de examen", render: (o) => formatDateTime(o.examDate) },
-    { key: "enrolled", header: "Inscriptos", align: "center", render: (o) => o._count.enrollments },
+    {
+      key: "enrolled",
+      header: "Inscriptos",
+      align: "center",
+      render: (o) => formatOfferingEnrollmentCount(o),
+    },
     { key: "maxCapacity", header: "Cupo", align: "center", render: (o) => o.maxCapacity ?? "Libre" },
     {
       key: "actions",
@@ -89,11 +100,11 @@ export function PeriodsPage() {
           nowrap
           actions={[
             {
-              label: "Ver inscriptos",
+              label: "Acta / Notas",
               size: "sm",
               variant: "secondary",
-              ariaLabel: `Ver inscriptos de ${o.subject.name}`,
-              onClick: () => page.roster.open(o),
+              ariaLabel: `Abrir acta y notas de ${o.subject.name}`,
+              onClick: () => navigate(ROUTES.director.offeringGrades(o.id)),
             },
             {
               label: "Eliminar",
@@ -167,7 +178,6 @@ export function PeriodsPage() {
 
       <FormModal {...periods.formModal} />
       <FormModal {...offerings.formModal} />
-      <OfferingRosterModal {...page.roster.modalProps} />
       <ConfirmModal {...page.confirmModal} />
     </Stack>
   );

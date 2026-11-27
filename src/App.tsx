@@ -16,6 +16,7 @@ import { StudentProgressPage } from "./pages/student/StudentProgressPage";
 import { StudentEnrollmentPage } from "./pages/student/StudentEnrollmentPage";
 import { MyEnrollmentsPage } from "./pages/student/MyEnrollmentsPage";
 import { TeacherOfferingsPage } from "./pages/teacher/TeacherOfferingsPage";
+import { OfferingGradesPage } from "./pages/shared/OfferingGradesPage";
 
 function ProtectedShell({ allowedRoles }: { allowedRoles: RoleLevel[] }) {
   return (
@@ -45,6 +46,7 @@ export default function App() {
           <Route path={ROUTES.director.students} element={<StudentsPage />} />
           <Route path="/director/alumnos/:studentId/historial" element={<StudentHistoryPage />} />
           <Route path={ROUTES.director.periods} element={<PeriodsPage />} />
+          <Route path="/director/ofertas/:offeringId" element={<OfferingGradesPage />} />
         </Route>
 
         <Route element={<ProtectedShell allowedRoles={[RoleLevel.SUPER_ADMIN]} />}>
@@ -59,6 +61,7 @@ export default function App() {
 
         <Route element={<ProtectedShell allowedRoles={[RoleLevel.DOCENTE]} />}>
           <Route path={ROUTES.teacher.offerings} element={<TeacherOfferingsPage />} />
+          <Route path="/docente/ofertas/:offeringId" element={<OfferingGradesPage />} />
         </Route>
 
         <Route path="*" element={<FallbackRedirect />} />
